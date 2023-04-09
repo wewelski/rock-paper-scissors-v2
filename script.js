@@ -1,53 +1,50 @@
-// [JavaScript - RPS Game]
+const getUserPick = () => prompt('Choose your weapon').toLowerCase();
 
-const getUserSelection = () => prompt("Choose your weapon").toLowerCase();
+//finally, I got this section working
+const getPcPick = () => {
+  const weapons = ['rock', 'paper', 'scissors'];
+  const pickIndex = Math.floor(Math.random() * weapons.length);
+  return weapons[pickIndex];
+}
 
-const getComputerSelection = () => {
-  const weapons = ["rock", "paper", "scissors"];
-  const randomIndex = Math.floor(Math.random() * weapons.length);
-
-  return weapons[randomIndex];
-};
-
-const playRound = (playerSelection, computerSelection) => {
-  if (playerSelection === computerSelection) {
-    return "Tie";
+const battle = (userPick,pcPick) => {
+  if (userPick === pcPick) {
+    return 'Tie!';
   } else if (
-    (playerSelection === "rock" && computerSelection === "scissors") ||
-    (playerSelection === "paper" && computerSelection === "rock") ||
-    (playerSelection === "scissors" && computerSelection === "paper")
+    (userPick === 'rock' && pcPick === 'scissors') ||
+    (userPick === 'scissors' && pcPick === 'paper') ||
+    (userPick === 'paper' && pcPick ==='rock')
   ) {
-    return "You Win";
+    return 'PC -1 life';
   } else {
-    return "You Lose";
+    return 'User -1 life';
   }
 };
 
-const game = (rounds) => {
-  let playerScore = 0;
-  let computerScore = 0;
-
-  while (playerScore < rounds && computerScore < rounds) {
-    const playerSelection = getUserSelection();
-    const computerSelection = getComputerSelection();
-    const result = playRound(playerSelection, computerSelection);
-
-    console.log(`Player Selection: ${playerSelection}`);
-    console.log(`Computer Selection: ${computerSelection}`);
+const game = (lives) => {
+  let userLives = lives;
+  let pcLives = lives;
+  
+  while (userLives !== 0 && pcLives !== 0) {
+    const userPick = getUserPick();
+    const pcPick = getPcPick();
+    const result = battle(userPick,pcPick);
+    
+    console.log(`User picked: ${userPick}`);
+    console.log(`PC picked: ${pcPick}`);
     console.log(`Result: ${result}`);
-
-    if (result === "You Win") {
-      playerScore++;
-    } else if (result === "You Lose") {
-      computerScore++;
+    
+    if (result === 'PC -1 life') {
+      pcLives--;
+    } else if (result === 'User -1 life') {
+      userLives--;
     }
   }
-
-  if (playerScore > computerScore) {
-    console.log("Player won the games");
-  } else {
-    console.log("You lose! Try better next time");
+  if (userLives === 0) {
+    console.log('You lost. No more lives left.');
+  } else if (pcLives === 0) {
+    console.log('You defeated PC. Congrats!');
   }
 };
 
-game(3);
+game(5);
